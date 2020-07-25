@@ -1,8 +1,8 @@
 judge = randi(2); %随机生成判断值，若为2，则表示此路段上有出入口
 enExitLabel = zeros(4, 2); %小区出入口，第一个参数代表横坐标，第二个参数代表纵坐标
 nodeLabel = rand(randi(7) + 3, 2); %规定一个小区内至少4个节点,至多10个节点,第一个参数代表横坐标，第二个参数代表纵坐标
-nodeLabel(:, 3) = 0; %节点参数汇总
-enExit = []; %出入口参数汇总
+nodeLabel(:, 3) = 0; %节点参数汇总,第一个参数代表横坐标,第二个参数代表纵坐标,第三个参数代表所有与之最短距离的节点的距离之和
+enExit = []; %出入口参数汇总,第一个参数代表横坐标，第二个参数代表纵坐标,第三个参数代表与之距离最短的节点距离,第4个参数代表与之距离最短节点的索引
 middleDistance = [];
 
 for i = 1:4%生成出入口位置坐标，储存在enExitLabel矩阵中
@@ -70,7 +70,6 @@ else %排除只有一个出入口的下述计算
     set(get(gca, 'XLabel'), 'String', '横坐标');
     set(get(gca, 'YLabel'), 'String', '纵坐标');
     %以下开始计算平均路网密度ρ,假设每个节点只能连接3个其他端点
-
     for i = 1:length(nodeLabel(:, 1))%遍历每个节点
 
         for m = 1:length(enExit(:, 4))%对已经连接到出入口的节点单独讨论
@@ -89,12 +88,10 @@ else %排除只有一个出入口的下述计算
                         end
 
                         middleDistance(end + 1) = two_distance(nodeLabel(i, :), nodeLabel(n, :));
-
                     end
 
                     sortDistance = sort(middleDistance);
                     nodeLabel(i, 3) = sum(sortDistance(1:k)); %得到与该节点连接的所有与其他道路连接的总长.
-
                 end
 
             end
@@ -112,7 +109,6 @@ else %排除只有一个出入口的下述计算
                 end
 
                 middleDistance(end + 1) = two_distance(nodeLabel(i, :), nodeLabel(n, :));
-
             end
 
             sortDistance = sort(middleDistance);
@@ -122,5 +118,19 @@ else %排除只有一个出入口的下述计算
     end
 
     %遍历完成,每个节点对应的距离之和都储存在nodeLabel的第三列中.
-    p = sum(nodeLabel(:, 3)) + sum(enExit(:, 3)) * 2; %p即为平均路网密度,因假设小区边长为1个单位,因此小区面积为1.
+    p = (sum(nodeLabel(:, 3)) + sum(enExit(:, 3)) * 2) / 2; %p即为平均路网密度,因每条路段都被重复加了一次,所以需要除以二;假设小区边长为1个单位,因此小区面积为1.
+    middleDistance = []; %初始化middledistance
+
+    for i = 1:length(enExit(:, 1))
+
+        for j = 1:length(enExit(:, 1))
+
+            if i == j
+                continue;
+            end
+
+        end
+
+    end
+
 end
