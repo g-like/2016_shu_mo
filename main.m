@@ -69,3 +69,12 @@ else %排除只有一个出入口的下述计算
     end
 
 end
+
+%汇总上述数据到enExit上,第一列代表横坐标，第二列代表纵坐标，第三列代表与之相距最近节点距离
+enExit = [];
+
+for i = 1:length(k)
+    enExit(i, 1) = enExitLabel(k(i), 1);
+    enExit(i, 2) = enExitLabel(k(i), 2);
+    enExit(i, 3) = enExitDistance(i);
+end
