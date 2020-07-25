@@ -30,15 +30,6 @@ for i = 1:4%生成出入口位置坐标，储存在enExitLabel矩阵中
 
 end
 
-figure('Name', '生成小区图'); %画个图看看
-
-scatter(enExitLabel(:, 1), enExitLabel(:, 2), 'filled')
-hold on
-scatter(nodeLabel(:, 1), nodeLabel(:, 2), 'filled')
-hold on
-set(get(gca, 'XLabel'), 'String', '横坐标');
-set(get(gca, 'YLabel'), 'String', '纵坐标');
-
 %假设路况不拥堵时小区开放造成的影响
 count = zeros(4, 1); %定义一个count数组,用来存储自定义随机生成的出入口特征值
 count(1) = enExitLabel(1, 1);
@@ -65,16 +56,24 @@ else %排除只有一个出入口的下述计算
 
         end
 
-        enExitDistance = [enExitDistance, gap];
+        enExitDistance(end + 1) = gap;
     end
 
-end
+    %汇总上述数据到enExit上,第一列代表横坐标，第二列代表纵坐标，第三列代表与之相距最近节点距离
+    enExit = [];
 
-%汇总上述数据到enExit上,第一列代表横坐标，第二列代表纵坐标，第三列代表与之相距最近节点距离
-enExit = [];
+    for i = 1:length(k)
+        enExit(i, 1) = enExitLabel(k(i), 1);
+        enExit(i, 2) = enExitLabel(k(i), 2);
+        enExit(i, 3) = enExitDistance(i);
+    end
 
-for i = 1:length(k)
-    enExit(i, 1) = enExitLabel(k(i), 1);
-    enExit(i, 2) = enExitLabel(k(i), 2);
-    enExit(i, 3) = enExitDistance(i);
+    figure('Name', '生成小区图'); %画个图看看
+    scatter(enExit(:, 1), enExit(:, 2), 'filled')
+    hold on
+    scatter(nodeLabel(:, 1), nodeLabel(:, 2), 'filled')
+    hold on
+    set(get(gca, 'XLabel'), 'String', '横坐标');
+    set(get(gca, 'YLabel'), 'String', '纵坐标');
+
 end
