@@ -38,3 +38,34 @@ scatter(nodeLabel(:, 1), nodeLabel(:, 2), 'filled')
 hold on
 set(get(gca, 'XLabel'), 'String', '横坐标');
 set(get(gca, 'YLabel'), 'String', '纵坐标');
+
+%假设路况不拥堵时小区开放造成的影响
+count = zeros(4, 1); %定义一个count数组,用来存储自定义随机生成的出入口特征值
+count(1) = enExitLabel(1, 1);
+count(2) = enExitLabel(2, 2);
+count(3) = enExitLabel(3, 1);
+count(4) = enExitLabel(4, 2);
+k = find(count);
+num = sum(sum(count ~= 0)); %统计count中非零元素个数
+
+enExitDistance = [];
+
+if num == 1
+    influence = 0; %如果只有一个出入口，开放小区根本没用，对该路段作用为0
+else %排除只有一个出入口的下述计算
+
+    for j = 1:length(k)%元素遍历enExitLabel
+        gap = 10; %初始化最短距离
+
+        for i = 1:length(nodeLabel(:, 1))%下标遍历nodeLabel
+
+            if two_distance(enExitLabel(k(j), :), nodeLabel(i, :)) <= gap%如果距离小于原先的最短距离
+                gap = two_distance(enExitLabel(k(j), :), nodeLabel(i, :));
+            end
+
+        end
+
+        enExitDistance = [enExitDistance, gap];
+    end
+
+end
