@@ -4,6 +4,9 @@ nodeLabel = rand(randi(7) + 3, 2); %¹æ¶¨Ò»¸öĞ¡ÇøÄÚÖÁÉÙ4¸ö½Úµã,ÖÁ¶à10¸ö½Úµã,µÚÒ»¸
 nodeLabel(:, 3) = 0; %½Úµã²ÎÊı»ã×Ü,µÚÒ»¸ö²ÎÊı´ú±íºá×ø±ê,µÚ¶ş¸ö²ÎÊı´ú±í×İ×ø±ê,µÚÈı¸ö²ÎÊı´ú±íËùÓĞÓëÖ®×î¶Ì¾àÀëµÄ½ÚµãµÄ¾àÀëÖ®ºÍ
 enExit = []; %³öÈë¿Ú²ÎÊı»ã×Ü,µÚÒ»¸ö²ÎÊı´ú±íºá×ø±ê£¬µÚ¶ş¸ö²ÎÊı´ú±í×İ×ø±ê,µÚÈı¸ö²ÎÊı´ú±íÓëÖ®¾àÀë×î¶ÌµÄ½Úµã¾àÀë,µÚ4¸ö²ÎÊı´ú±íÓëÖ®¾àÀë×î¶Ì½ÚµãµÄË÷Òı
 middleDistance = [];
+middleDistance2 = [];
+middleDistance3 = [];
+enExitDistance = []; %´æ´¢Ã¿¸ö³öÈë¿Úµ½¶ÔÓ¦ÆäËû³öÈë¿ÚµÄºÏÀí¾àÀë
 
 for i = 1:4%Éú³É³öÈë¿ÚÎ»ÖÃ×ø±ê£¬´¢´æÔÚenExitLabel¾ØÕóÖĞ
     judge = randi(2);
@@ -119,14 +122,61 @@ else %ÅÅ³ıÖ»ÓĞÒ»¸ö³öÈë¿ÚµÄÏÂÊö¼ÆËã
 
     %±éÀúÍê³É,Ã¿¸ö½Úµã¶ÔÓ¦µÄ¾àÀëÖ®ºÍ¶¼´¢´æÔÚnodeLabelµÄµÚÈıÁĞÖĞ.
     p = (sum(nodeLabel(:, 3)) + sum(enExit(:, 3)) * 2) / 2; %p¼´ÎªÆ½¾ùÂ·ÍøÃÜ¶È,ÒòÃ¿ÌõÂ·¶Î¶¼±»ÖØ¸´¼ÓÁËÒ»´Î,ËùÒÔĞèÒª³ıÒÔ¶ş;¼ÙÉèĞ¡Çø±ß³¤Îª1¸öµ¥Î»,Òò´ËĞ¡ÇøÃæ»ıÎª1.
+
+    %ÒÔÏÂ¼ÆËãÃ¿¸ö³öÈë¿Úµ½´ïÁíÍâÒ»¸ö³öÈë¿ÚĞèÒªµÄ×î¶Ì¾àÀë(ĞèÒª¾­¹ıºÏÀí¶à¸öÖĞ¼ä½Úµã)
     middleDistance = []; %³õÊ¼»¯middledistance
 
-    for i = 1:length(enExit(:, 1))
+    for i = 1:length(enExit(:, 1))%±éÀúµÚÒ»¸öÈë¿Úµã
 
-        for j = 1:length(enExit(:, 1))
+        for j = 1:length(enExit(:, 1))%±éÀúµÚ¶ş¸öÈë¿Úµã
 
-            if i == j
+            if i == j%Èç¹ûÁ½¸öµãÖØºÏ£¬ÎŞÒâÒå
                 continue;
+            end
+
+            if enExit(i, 4) == enExit(j, 4)%Èç¹ûÁ½³öÈë¿ÚµÄ×î¶Ì¾àÀë½ÚµãÇ¡ºÃÊÇÍ¬Ò»¸ö,ÔòÖ±½ÓÍ¨¹ı×î¶Ì¾àÀë½ÚµãÍ¨µ½ÁíÍâµÄ³ö¿Ú
+                enExitDistance(i, j) = enExit(i, 3) + enExit(j, 3);
+                continue;
+            end
+
+            for m = 1:length(nodeLabel(:, 1))
+
+                for n = 1:length(nodeLabel(:, 1))
+
+                    if n == m
+                        continue;
+                    end
+
+                    middleDistance2(end + 1) = ...,
+                    two_distance(enExit(i, :), nodeLabel(m, :)) ...,
+                    +two_distance(nodeLabel(m, :), nodeLabel(n, :)) ...,
+                    + two_distance(nodeLabel(n, :), enExit(j, :)); %µÃµ½Ò»¸ö¾­¹ıÁ½½ÚµãµÄ¾àÀëÊı×é
+
+                    for k = 1:length(nodeLabel(:, 1))
+
+                        if k == n || k == m
+                            continue;
+                        end
+
+                        middleDistance3(end + 1) = ...,
+                        two_distance(enExit(i, :), nodeLabel(m, :)) ...,
+                        +two_distance(nodeLabel(m, :), nodeLabel(n, :)) ...,
+                        +two_distance(nodeLabel(n, :), nodeLabel(k, :)) ...,
+                        +two_distance(nodeLabel(k, :), enExit(j, :)); %µÃµ½Ò»¸ö¾­¹ıÈı½ÚµãµÄ¾àÀëÊı×é
+
+                    end
+
+                end
+
+            end
+
+            sortDistance2 = sort(middleDistance2); %ÅÅĞò,ÓÉĞ¡µ½´ó
+            sortDistance3 = sort(middleDistance3); %ÅÅĞò,ÓÉĞ¡µ½´ó
+
+            if (sortDistance2(1) - sortDistance3(1)) / sortDistance2(1) <= 0.1%Èç¹ûÁ½½ÚµãºÍÈı½ÚµãÖ®¼äÏà²î¾àÀëºÜĞ¡,Ôò¿ÉÒÔÈÏÎª¸ÃÂ·¶Î¾­¹ıÁËÈı¸ö½Úµã.¹ÊÑ¡ÔñÈı½Úµã.
+                enExitDistance(i, j) = sortDistance3(1);
+            else
+                enExitDistance(i, j) = sortDistance2(1);
             end
 
         end
