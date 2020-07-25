@@ -29,3 +29,12 @@ for i = 1:4%生成出入口位置坐标，储存在enExitLabel矩阵中
     end
 
 end
+
+figure('Name', '生成小区图'); %画个图看看
+
+scatter(enExitLabel(:, 1), enExitLabel(:, 2), 'filled')
+hold on
+scatter(nodeLabel(:, 1), nodeLabel(:, 2), 'filled')
+hold on
+set(get(gca, 'XLabel'), 'String', '横坐标');
+set(get(gca, 'YLabel'), 'String', '纵坐标');
