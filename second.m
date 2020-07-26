@@ -1,0 +1,10 @@
+S = 4;
+enExit = [];
+enExit(1, 1) = S * rand(1);
+enExit(1, 2) = 0;
+enExit(2, 1) = 0;
+enExit(2, 2) = S * rand(1);
+enExit(3, 1) = S * rand(1);
+enExit(3, 2) = S;
+enExit(4, 1) = 0;
+enExit(4, 2) = S * rand(1);
