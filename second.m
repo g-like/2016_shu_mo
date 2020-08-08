@@ -14,8 +14,12 @@ node(2, 2) = k * node(2, 1) + b;
 figure('Name', '生成小区图'); %画个图看看
 scatter(enExit(:, 1), enExit(:, 2), 'filled'); hold on
 scatter(node(:, 1), node(:, 2), 'filled'); hold on
-set(get(gca, 'XLabel'), 'String', '横坐标');
-set(get(gca, 'YLabel'), 'String', '纵坐标'); hold on
+set(get(gca, 'XLabel'), 'String', '主干道');
+set(get(gca, 'YLabel'), 'String', '主干道'); hold on
+set(get(gca, 'Title'), 'String', '小区图'); hold on
 line([enExit(1, 1), enExit(3, 1)], [enExit(1, 2), enExit(3, 2)]); hold on
 line([node(1, 1), enExit(2, 1)], [node(1, 2), enExit(2, 2)]); hold on
 line([node(2, 1), enExit(4, 1)], [node(2, 2), enExit(4, 2)]); hold on
+d = two_distance(enExit(1, :), enExit(3, :)) + two_distance(node(1, :), enExit(2, :)) + two_distance(node(2, :), enExit(4, :));
+p = d / S / S; %路网密度
+v_main = 16.67; v_in = 5.55; %将主干道车辆速度设定为60km/h,小区内车辆速度设定为20km/h
